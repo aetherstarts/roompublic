@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP LOGIN | FAREL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon: #bc13fe; --bg: #05010a; --glass: rgba(20, 5, 35, 0.9); }
+        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: var(--bg); font-family: 'Rajdhani', sans-serif; color: white; background-image: radial-gradient(circle at center, #1a052e 0%, #05010a 100%); }
+        .card { width: 100%; max-width: 350px; padding: 40px 30px; background: var(--glass); border: 1px solid var(--neon); border-radius: 20px; box-shadow: 0 0 20px rgba(188, 19, 254, 0.3); text-align: center; backdrop-filter: blur(10px); }
+        h2 { font-family: 'Orbitron', sans-serif; color: var(--neon); letter-spacing: 3px; margin-bottom: 30px; }
+        input { width: 100%; padding: 12px; margin-bottom: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(188, 19, 254, 0.3); border-radius: 10px; color: white; outline: none; }
+        .btn { width: 100%; padding: 12px; background: var(--neon); border: none; border-radius: 10px; color: white; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; }
+        p { font-size: 13px; margin-top: 20px; opacity: 0.6; }
+        a { color: var(--neon); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>LOGIN</h2>
+        <input type="text" id="logUser" placeholder="Username">
+        <input type="password" id="logPass" placeholder="Password">
+        <button class="btn" onclick="handleLogin()">ACCESS SYSTEM</button>
+        <p>New Identity? <a href="index.html">Register</a></p>
+    </div>
+
+    <script>
+        async function handleLogin() {
+            const user = document.getElementById('logUser').value;
+            const pass = document.getElementById('logPass').value;
+
+            try {
+                const res = await fetch(`https://raw.githubusercontent.com/aetherstarts/database/main/auth.json?t=${Date.now()}`);
+                const users = await res.json();
+
+                const validUser = users.find(u => u.username === user && u.password === pass);
+
+                if (validUser) {
+                    localStorage.setItem('banz_user', JSON.stringify({
+                        id: 'vip_' + Math.random().toString(16).slice(2, 8),
+                        username: user
+                    }));
+                    alert("Welcome back, VIP!");
+                    window.location.href = "room.html"; 
+                } else {
+                    alert("Invalid Username or Password!");
+                }
+            } catch (e) {
+                alert("Critical Error: Database Unreachable!");
+            }
+        }
+    </script>
+</body>
+</html>
