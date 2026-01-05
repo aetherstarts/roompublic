@@ -46,42 +46,65 @@
     </div>
 
     <script>
-        async function handleRegister() {
-            const user = document.getElementById('regUser').value;
-            const pass = document.getElementById('regPass').value;
-            if(!user || !pass) return alert("Fill all fields!");
+    async function handleRegister() {
+        const user = document.getElementById('regUser').value;
+        const pass = document.getElementById('regPass').value;
+        
+        if(!user || !pass) return alert("Isi semua kolom!");
 
-            const token = "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";
-            const owner = "aetherstarts";
-            const repo = "database";
-            const path = "auth.json";
+        const token = "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"; 
+        
+        const owner = "aetherstarts"; 
+        const repo = "database";
+        const path = "auth.json";
 
-            try {
-                const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-                    headers: { Authorization: `token ${token}` }
-                });
-                const fileData = await res.json();
-                let currentContent = JSON.parse(atob(fileData.content));
+        try {
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                headers: { 
+                    "Authorization": `token ${token}`,
+                    "Accept": "application/vnd.github.v3+json"
+                }
+            });
 
-                currentContent.push({ username: user, password: pass });
-
-                await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-                    method: "PUT",
-                    headers: { Authorization: `token ${token}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        message: `Register user: ${user}`,
-                        content: btoa(JSON.stringify(currentContent, null, 2)),
-                        sha: fileData.sha
-                    })
-                });
-
-                alert("Registration Successful!");
-                window.location.href = "login.html";
-            } catch (e) {
-                console.error(e);
-                alert("Error connecting to database!");
+            if (!res.ok) {
+                throw new Error("Gagal akses Repo. Cek Token atau Nama Repo.");
             }
+
+            const fileData = await res.json();
+            // Decode data auth.json
+            let currentContent = JSON.parse(atob(fileData.content));
+
+            if (currentContent.find(u => u.username === user)) {
+                return alert("Username sudah terdaftar!");
+            }
+
+            currentContent.push({ username: user, password: pass });
+
+            const updateRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                method: "PUT",
+                headers: { 
+                    "Authorization": `token ${token}`, 
+                    "Content-Type": "application/json" 
+                },
+                body: JSON.stringify({
+                    message: `Register: ${user}`,
+                    content: btoa(JSON.stringify(currentContent, null, 2)),
+                    sha: fileData.sha
+                })
+            });
+
+            if (updateRes.ok) {
+                alert("Identity Created Successfully!");
+                window.location.href = "login.html";
+            } else {
+                alert("Gagal menyimpan ke GitHub.");
+            }
+
+        } catch (e) {
+            console.error(e);
+            alert("Error: " + e.message);
         }
-    </script>
+    }
+</script>
 </body>
 </html>
