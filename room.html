@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FAREL | VIP PRIVATE ROOM</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #05010a;
+            --vip-purple: #bc13fe;
+            --vip-violet: #8a2be2;
+            --vip-white: #ffffff;
+            --glass-card: rgba(20, 5, 35, 0.95);
+            --neon-glow: 0 0 15px rgba(188, 19, 254, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        html, body { 
+            height: 100%; 
+            height: -webkit-fill-available;
+            overflow: hidden; 
+            background: var(--bg-deep);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--vip-white);
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at top, #1a052e 0%, #05010a 100%);
+        }
+
+        header {
+            background: var(--glass-card);
+            backdrop-filter: blur(15px);
+            padding: 12px 20px;
+            border-bottom: 2px solid var(--vip-purple);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--neon-glow);
+            z-index: 10;
+        }
+
+        .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: var(--vip-purple);
+            text-shadow: var(--neon-glow);
+            letter-spacing: 2px;
+        }
+
+        .online-status {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: #00ffa3;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        #globalChatContainer {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            scroll-behavior: auto;
+        }
+
+        /* REPLY UI */
+        .reply-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 3px solid var(--vip-purple);
+            padding: 5px 8px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #ccc;
+        }
+
+        #replyPreviewContainer {
+            display: none;
+            background: var(--glass-card);
+            padding: 8px 15px;
+            border-left: 4px solid var(--vip-purple);
+            color: white;
+            font-size: 12px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .message-wrapper {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 14px;
+            position: relative;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease;
+            transition: transform 0.2s ease-out;
+            touch-action: pan-y;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .msg-other { background: var(--glass-card); border: 1px solid rgba(188, 19, 254, 0.2); align-self: flex-start; border-bottom-left-radius: 2px; }
+        .msg-me { background: linear-gradient(135deg, var(--vip-purple), var(--vip-violet)); align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 4px 12px rgba(138, 43, 226, 0.3); }
+
+        .sender-name { font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: bold; color: var(--vip-purple); margin-bottom: 4px; display: block; }
+        .msg-me .sender-name { color: var(--vip-white); opacity: 0.8; }
+
+        .media-content { max-width: 100%; border-radius: 10px; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+
+        .input-area {
+            background: var(--glass-card);
+            padding: 5px 15px 30px 15px;
+            border-top: 1px solid rgba(188, 19, 254, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .input-row { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
+
+        #globalMessageInput {
+            flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(188, 19, 254, 0.3);
+            padding: 12px 18px; border-radius: 25px; color: white; outline: none; font-family: 'Rajdhani', sans-serif;
+        }
+
+        .send-v-btn {
+            background: var(--vip-purple); color: white; border: none; width: 45px; height: 45px;
+            border-radius: 50%; cursor: pointer; box-shadow: var(--neon-glow); display: flex; justify-content: center; align-items: center; transition: 0.3s;
+        }
+        .send-v-btn:active { transform: scale(0.9); }
+
+        #mentionDropdown { background: var(--glass-card); border: 1px solid var(--vip-purple); border-radius: 10px; margin-bottom: 8px; display: none; max-height: 150px; overflow-y: auto; position: absolute; bottom: 80px; width: 200px; z-index: 100; }
+        .mention-item { padding: 10px 15px; font-size: 13px; cursor: pointer; color: white; border-bottom: 1px solid rgba(188,19,254,0.1); }
+        .mention-item:hover { background: var(--vip-purple); }
+
+        #typingIndicator { font-size: 11px; color: var(--vip-purple); margin-left: 15px; height: 15px; font-style: italic; }
+
+        #mediaUpload { display: none; }
+        
+        .tag-highlight { color: #00ffa3; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">Ω FAREL-VIP</div>
+    <div class="online-status">
+        <i class="fa-solid fa-circle" style="font-size: 7px; color: #00ffa3; animation: pulse 1s infinite;"></i> 
+        ACTIVE: <span id="userOnline">0</span>
+    </div>
+</header>
+
+<div id="globalChatContainer"></div>
+
+<div id="typingIndicator"></div>
+
+<div class="input-area">
+    <div id="replyPreviewContainer">
+        <div id="replyText">Replying to...</div>
+        <i class="fa-solid fa-xmark" onclick="cancelReply()" style="cursor:pointer"></i>
+    </div>
+
+    <div id="mentionDropdown"></div>
+
+    <div class="input-row">
+        <label for="mediaUpload" style="color: var(--vip-purple); font-size: 20px; cursor: pointer;">
+            <i class="fa-solid fa-circle-plus"></i>
+        </label>
+        <input type="file" id="mediaUpload" accept="image/*,video/*,application/*">
+        
+        <input type="text" id="globalMessageInput" placeholder="Enter encrypted text..." autocomplete="off">
+        
+        <button class="send-v-btn" id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, set, onDisconnect, serverTimestamp, remove, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const firebaseConfig = { databaseURL: "https://fir-c6670-default-rtdb.asia-southeast1.firebasedatabase.app" };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let userData = JSON.parse(localStorage.getItem('farel_user'));
+    let selectedReply = null;
+    
+    if (!userData) window.location.href = "index.html";
+
+    // --- FIX ONLINE STATUS ---
+    // Gunakan ID yang unik agar tidak menimpa user lain (Stuck di 1)
+    const myStatusRef = ref(db, 'online_users/' + userData.id);
+    const typingRef = ref(db, 'typing/' + userData.id);
+
+    set(myStatusRef, { username: userData.username, online: true, lastActive: serverTimestamp() });
+    onDisconnect(myStatusRef).remove(); // Hapus saat tab ditutup
+    onDisconnect(typingRef).remove();
+
+    onValue(ref(db, 'online_users'), (snap) => {
+        let count = 0;
+        snap.forEach(() => count++);
+        document.getElementById('userOnline').innerText = count;
+    });
+
+    // --- MENTION SYSTEM ---
+    async function loadUsersForMention(filter = "") {
+        try {
+            const res = await fetch(`https://raw.githubusercontent.com/aetherstarts/database/main/auth.json?t=${Date.now()}`);
+            const users = await res.json();
+            const dropdown = document.getElementById('mentionDropdown');
+            dropdown.innerHTML = '';
+            users.forEach(u => {
+                if(u.username.toLowerCase().includes(filter.toLowerCase())) {
+                    const item = document.createElement('div');
+                    item.className = 'mention-item';
+                    item.innerText = `@${u.username}`;
+                    item.onclick = () => {
+                        const input = document.getElementById('globalMessageInput');
+                        input.value = input.value.replace(/@\w*$/, `@${u.username} `);
+                        dropdown.style.display = 'none';
+                        input.focus();
+                    };
+                    dropdown.appendChild(item);
+                }
+            });
+            dropdown.style.display = dropdown.innerHTML ? 'block' : 'none';
+        } catch(e) { console.error("Mention load failed"); }
+    }
+
+    // --- TYPING & MENTION LOGIC ---
+    const inputEl = document.getElementById('globalMessageInput');
+    inputEl.addEventListener('input', (e) => {
+        const val = e.target.value;
+        const mentionMatch = val.match(/@(\w*)$/);
+
+        if (mentionMatch) {
+            loadUsersForMention(mentionMatch[1]);
+        } else {
+            document.getElementById('mentionDropdown').style.display = 'none';
+        }
+
+        if (val.length > 0) {
+            set(typingRef, { username: userData.username, status: 'sedang mengetik...' });
+        } else {
+            remove(typingRef);
+        }
+    });
+
+    onValue(ref(db, 'typing'), (snap) => {
+        const indicator = document.getElementById('typingIndicator');
+        let typers = [];
+        snap.forEach(child => {
+            const data = child.val();
+            if (data.username !== userData.username) typers.push(`${data.username} ${data.status}`);
+        });
+        indicator.innerText = typers.join(', ');
+    });
+
+    // --- SWIPE TO REPLY LOGIC ---
+    window.initSwipe = (el, username, text) => {
+        let touchStartX = 0;
+        el.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, {passive: true});
+        el.addEventListener('touchmove', (e) => {
+            let moveX = e.touches[0].clientX - touchStartX;
+            if (moveX > 0 && moveX < 80) el.style.transform = `translateX(${moveX}px)`;
+        }, {passive: true});
+        el.addEventListener('touchend', (e) => {
+            let moveX = e.changedTouches[0].clientX - touchStartX;
+            if (moveX > 50) {
+                selectedReply = { username, text: text.substring(0, 50) };
+                document.getElementById('replyPreviewContainer').style.display = 'flex';
+                document.getElementById('replyText').innerText = `Replying to ${username}: ${text.substring(0, 30)}...`;
+                document.getElementById('globalMessageInput').focus();
+            }
+            el.style.transform = `translateX(0px)`;
+        });
+    };
+
+    window.cancelReply = () => {
+        selectedReply = null;
+        document.getElementById('replyPreviewContainer').style.display = 'none';
+    };
+
+    // --- SEND MESSAGE ---
+    window.sendGlobalMessage = async () => {
+        const input = document.getElementById('globalMessageInput');
+        const fileInput = document.getElementById('mediaUpload');
+        const text = input.value.trim();
+        const file = fileInput.files[0];
+
+        if (!text && !file) return;
+
+        let mediaData = null, mType = null;
+        if (file) {
+            const reader = new FileReader();
+            mediaData = await new Promise(r => { reader.onload=()=>r(reader.result); reader.readAsDataURL(file); });
+            mType = file.type;
+        }
+
+        try {
+            await push(ref(db, 'roam_messages'), {
+                userId: userData.id, username: userData.username, text: text,
+                media: mediaData, mediaType: mType, replyTo: selectedReply, timestamp: serverTimestamp()
+            });
+            input.value = ''; fileInput.value = ''; cancelReply(); remove(typingRef);
+        } catch (e) { alert("Error!"); }
+    };
+
+    // --- FIX RENDER (ANTI JUMP & AUTO SCROLL DOWN) ---
+    const chatContainer = document.getElementById('globalChatContainer');
+    
+    onValue(query(ref(db, 'roam_messages'), limitToLast(50)), (snap) => {
+        // Cek apakah posisi user sedang di paling bawah sebelum render
+        const isAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop <= chatContainer.clientHeight + 150;
+
+        chatContainer.innerHTML = '';
+        snap.forEach((child) => {
+            const data = child.val();
+            const isMe = data.userId === userData.id;
+            const div = document.createElement('div');
+            div.className = `message-wrapper ${isMe ? 'msg-me' : 'msg-other'}`;
+            
+            let htmlContent = `<span class="sender-name">${data.username}</span>`;
+            if (data.replyTo) htmlContent += `<div class="reply-box"><b>@${data.replyTo.username}</b>: ${data.replyTo.text}</div>`;
+            
+            if (data.text) {
+                const formatted = data.text.replace(/@(\w+)/g, '<span class="tag-highlight">@$1</span>');
+                htmlContent += `<div>${formatted}</div>`;
+            }
+            
+            if (data.media) {
+                if (data.mediaType?.startsWith('image/')) {
+                    // Gunakan min-height agar tidak melompat saat gambar loading
+                    htmlContent += `<img src="${data.media}" class="media-content" style="min-height:150px; background:#111;" onload="if(${isAtBottom || isMe}) document.getElementById('globalChatContainer').scrollTop = document.getElementById('globalChatContainer').scrollHeight">`;
+                } else if (data.mediaType?.startsWith('video/')) {
+                    htmlContent += `<video src="${data.media}" class="media-content" controls preload="metadata"></video>`;
+                } else {
+                    htmlContent += `<div class="media-content" style="padding:10px; background:rgba(0,0,0,0.2)"><i class="fa-solid fa-file"></i> Document</div>`;
+                }
+            }
+            
+            div.innerHTML = htmlContent;
+            chatContainer.appendChild(div);
+            window.initSwipe(div, data.username, data.text || "[Media]");
+        });
+
+        // Paksa scroll ke bawah jika user memang di bawah atau baru kirim pesan sendiri
+        if (isAtBottom) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    });
+
+    document.getElementById('sendBtn').addEventListener('click', window.sendGlobalMessage);
+    document.getElementById('globalMessageInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') window.sendGlobalMessage();
+    });
+</script>
+
+</body>
+</html>
