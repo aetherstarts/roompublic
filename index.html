@@ -49,16 +49,16 @@
         async function handleRegister() {
             const user = document.getElementById('regUser').value;
             const pass = document.getElementById('regPass').value;
-            if(!user || !pass) return alert("Isi semua kolom!");
+            if(!user || !pass) return alert("Harap isi semua kolom!");
 
-            // Wajib ganti dengan token yang BARU dibuat
-            const token = "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"; 
+            // Konfigurasi GitHub (Sudah disesuaikan)
+            const token = "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";
             const owner = "aetherstarts";
             const repo = "database";
             const path = "auth.json";
 
             try {
-                // 1. Ambil data file auth.json
+                // 1. Ambil data auth.json dari GitHub
                 const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
                     headers: { 
                         "Authorization": `token ${token}`,
@@ -66,49 +66,48 @@
                     }
                 });
 
-                if (res.status === 401) throw new Error("Token tidak valid/Expired!");
-                if (res.status === 404) throw new Error("File auth.json atau Repo tidak ditemukan!");
+                if (!res.ok) {
+                    throw new Error("Gagal akses database. Pastikan file auth.json di GitHub berisi []");
+                }
 
                 const fileData = await res.json();
                 
-                // Decode konten (menggunakan cara yang lebih aman untuk karakter spesial)
+                // Decode konten Base64 secara aman
                 let currentContent = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
 
-                // Cek duplikat username
+                // 2. Cek apakah username sudah ada
                 if (currentContent.find(u => u.username === user)) {
-                    return alert("Username sudah terdaftar!");
+                    return alert("Username ini sudah terdaftar!");
                 }
 
-                // 2. Tambah user baru
+                // 3. Tambahkan data user baru
                 currentContent.push({ username: user, password: pass });
 
-                // 3. Update ke GitHub
-                const updatedBody = JSON.stringify({
-                    message: `Daftar user: ${user}`,
-                    content: btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2)))),
-                    sha: fileData.sha
-                });
-
-                const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                // 4. Kirim kembali data yang diperbarui ke GitHub
+                const updateRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
                     method: "PUT",
                     headers: { 
-                        "Authorization": `token ${token}`,
-                        "Content-Type": "application/json"
+                        "Authorization": `token ${token}`, 
+                        "Content-Type": "application/json" 
                     },
-                    body: updatedBody
+                    body: JSON.stringify({
+                        message: `Registrasi user baru: ${user}`,
+                        content: btoa(unescape(encodeURIComponent(JSON.stringify(currentContent, null, 2)))),
+                        sha: fileData.sha // Diperlukan agar GitHub tahu file mana yang diganti
+                    })
                 });
 
-                if (putRes.ok) {
-                    alert("Registrasi Berhasil!");
+                if (updateRes.ok) {
+                    alert("Registrasi Berhasil! Silakan Login.");
                     window.location.href = "login.html";
                 } else {
-                    const errorData = await putRes.json();
-                    throw new Error("Gagal simpan: " + errorData.message);
+                    const err = await updateRes.json();
+                    throw new Error(err.message);
                 }
 
             } catch (e) {
                 console.error(e);
-                alert("SISTEM ERROR: " + e.message);
+                alert("Sistem Error: " + e.message);
             }
         }
     </script>
