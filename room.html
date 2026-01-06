@@ -73,6 +73,7 @@
             scroll-behavior: auto;
         }
 
+        /* DATE SEPARATOR */
         .date-separator {
             align-self: center;
             background: rgba(255,255,255,0.1);
@@ -105,72 +106,150 @@
 
         .msg-time { font-size: 9px; opacity: 0.6; float: right; margin-top: 5px; margin-left: 8px; font-family: 'Share Tech Mono'; }
         .sender-name { font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: bold; color: var(--vip-purple); margin-bottom: 4px; display: block; }
-
-        /* MEDIA PREVIEW PANEL */
-        #mediaPreviewPanel {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        #previewImage, #previewVideo {
-            max-width: 100%;
-            max-height: 60vh;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: var(--neon-glow);
-        }
-        .preview-actions {
-            width: 100%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        #captionInput {
-            width: 100%;
-            padding: 15px;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid var(--vip-purple);
-            color: white;
-            outline: none;
-            font-family: 'Rajdhani', sans-serif;
-        }
-        .preview-btns { display: flex; gap: 10px; width: 100%; }
-        .p-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: 'Orbitron'; }
-        .p-cancel { background: #444; color: white; }
-        .p-send { background: var(--vip-purple); color: white; box-shadow: var(--neon-glow); }
+        .msg-me .sender-name { color: var(--vip-white); opacity: 0.8; }
 
         /* MEDIA VIEWER MODAL */
-        #mediaViewer { display: none; position: fixed; inset: 0; background: #000; z-index: 1000; flex-direction: column; }
-        #mediaViewerHeader { padding: 20px; display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.5); position: absolute; top: 0; width: 100%; z-index: 10; }
-        #mediaViewerContent { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        #mediaViewerContent img, #mediaViewerContent video { max-width: 100%; max-height: 80vh; border-radius: 8px; }
+        #mediaViewer { 
+            display: none; 
+            position: fixed; 
+            inset: 0; 
+            background: #000; 
+            z-index: 1000; 
+            flex-direction: column; 
+        }
+        #mediaViewerHeader { 
+            padding: 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); 
+            position: absolute; 
+            top: 0; 
+            width: 100%; 
+            z-index: 10; 
+        }
+        #mediaViewerContent { 
+            flex: 1; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px; 
+        }
+        #mediaViewerContent img, #mediaViewerContent video { 
+            max-width: 100%; 
+            max-height: 80vh; 
+            border-radius: 8px; 
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .mv-info { color: white; margin-left: 15px; }
+        .mv-info h4 { font-size: 14px; margin: 0; }
+        .mv-info p { font-size: 11px; opacity: 0.7; margin: 0; }
 
         /* CONTEXT MENU */
-        #contextMenu { display: none; position: fixed; background: var(--glass-card); border: 1px solid var(--vip-purple); border-radius: 12px; z-index: 2500; width: 180px; box-shadow: var(--neon-glow); backdrop-filter: blur(10px); }
-        .context-item { padding: 12px 15px; font-size: 13px; color: white; display: flex; align-items: center; gap: 10px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        #contextMenu { 
+            display: none; 
+            position: fixed; 
+            background: var(--glass-card); 
+            border: 1px solid var(--vip-purple); 
+            border-radius: 12px; 
+            z-index: 2000; 
+            width: 180px; 
+            box-shadow: var(--neon-glow); 
+            backdrop-filter: blur(10px); 
+            overflow: hidden;
+        }
+        .context-item { 
+            padding: 12px 15px; 
+            font-size: 13px; 
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            cursor: pointer; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+        }
+        .context-item:active { background: var(--vip-purple); }
+        .context-item i { width: 15px; color: var(--vip-purple); }
+        .context-item:active i { color: white; }
 
-        .media-container { position: relative; min-height: 180px; min-width: 200px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; margin-top: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
-        .media-content { max-width: 100%; border-radius: 10px; display: none; }
-        .media-loading { position: absolute; font-size: 12px; color: var(--vip-purple); animation: blink 1s infinite; }
+        /* MEDIA LOADING STYLES */
+        .media-container {
+            position: relative;
+            min-height: 180px;
+            min-width: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .media-content { 
+            max-width: 100%; 
+            border-radius: 10px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            display: none;
+        }
+
+        .media-loading {
+            position: absolute;
+            font-size: 12px;
+            color: var(--vip-purple);
+            font-family: 'Share Tech Mono', monospace;
+            animation: blink 1s infinite;
+        }
+
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        .input-area { background: var(--glass-card); padding: 5px 15px 30px 15px; border-top: 1px solid rgba(188, 19, 254, 0.3); backdrop-filter: blur(20px); }
+        .input-area {
+            background: var(--glass-card);
+            padding: 5px 15px 30px 15px;
+            border-top: 1px solid rgba(188, 19, 254, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
         .input-row { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
-        #globalMessageInput { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(188, 19, 254, 0.3); padding: 12px 18px; border-radius: 25px; color: white; outline: none; }
-        .send-v-btn { background: var(--vip-purple); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
-        .reply-box { background: rgba(0, 0, 0, 0.4); border-left: 3px solid var(--vip-purple); padding: 5px 8px; margin-bottom: 5px; border-radius: 4px; font-size: 11px; }
-        #mentionDropdown { background: var(--glass-card); border: 1px solid var(--vip-purple); border-radius: 10px; display: none; position: absolute; bottom: 80px; width: 200px; z-index: 100; max-height: 150px; overflow-y: auto; }
-        .mention-item { padding: 10px; color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .tag-highlight { color: #00ffa3; font-weight: bold; }
+
+        #globalMessageInput {
+            flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(188, 19, 254, 0.3);
+            padding: 12px 18px; border-radius: 25px; color: white; outline: none; font-family: 'Rajdhani', sans-serif;
+        }
+
+        .send-v-btn {
+            background: var(--vip-purple); color: white; border: none; width: 45px; height: 45px;
+            border-radius: 50%; cursor: pointer; box-shadow: var(--neon-glow); display: flex; justify-content: center; align-items: center; transition: 0.3s;
+        }
+
+        .reply-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 3px solid var(--vip-purple);
+            padding: 5px 8px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #ccc;
+        }
+
+        #replyPreviewContainer {
+            display: none;
+            background: var(--glass-card);
+            padding: 8px 15px;
+            border-left: 4px solid var(--vip-purple);
+            color: white;
+            font-size: 12px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #mentionDropdown { background: var(--glass-card); border: 1px solid var(--vip-purple); border-radius: 10px; margin-bottom: 8px; display: none; max-height: 150px; overflow-y: auto; position: absolute; bottom: 80px; width: 200px; z-index: 100; }
+        .mention-item { padding: 10px 15px; font-size: 13px; cursor: pointer; color: white; border-bottom: 1px solid rgba(188,19,254,0.1); }
+        .mention-item:hover { background: var(--vip-purple); }
         #typingIndicator { font-size: 11px; color: var(--vip-purple); margin-left: 15px; height: 15px; font-style: italic; }
+        #mediaUpload { display: none; }
+        .tag-highlight { color: #00ffa3; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -187,21 +266,10 @@
 
 <div id="typingIndicator"></div>
 
-<div id="mediaPreviewPanel">
-    <img id="previewImage" style="display:none">
-    <video id="previewVideo" style="display:none" controls></video>
-    <div class="preview-actions">
-        <input type="text" id="captionInput" placeholder="Add a caption...">
-        <div class="preview-btns">
-            <button class="p-btn p-cancel" onclick="closePreview()">CANCEL</button>
-            <button class="p-btn p-send" onclick="confirmSendMedia()">SEND</button>
-        </div>
-    </div>
-</div>
-
 <div class="input-area">
-    <div id="replyPreviewContainer" style="display:none; color:white; font-size:12px; padding:8px; border-left: 3px solid var(--vip-purple); background: rgba(0,0,0,0.3); margin-bottom: 5px; justify-content: space-between; align-items: center;">
-        <span id="replyText"></span> <i class="fa-solid fa-xmark" onclick="cancelReply()" style="cursor:pointer"></i>
+    <div id="replyPreviewContainer">
+        <div id="replyText">Replying to...</div>
+        <i class="fa-solid fa-xmark" onclick="cancelReply()" style="cursor:pointer"></i>
     </div>
 
     <div id="mentionDropdown"></div>
@@ -210,23 +278,24 @@
         <label for="mediaUpload" style="color: var(--vip-purple); font-size: 20px; cursor: pointer;">
             <i class="fa-solid fa-circle-plus"></i>
         </label>
-        <input type="file" id="mediaUpload" style="display:none" accept="image/*,video/*" onchange="handleFileSelect(event)">
+        <input type="file" id="mediaUpload" accept="image/*,video/*">
         
         <input type="text" id="globalMessageInput" placeholder="Enter encrypted text..." autocomplete="off">
         
-        <button class="send-v-btn" id="sendBtn" onclick="window.sendGlobalMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        <button class="send-v-btn" id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
 </div>
 
 <div id="mediaViewer">
     <div id="mediaViewerHeader">
         <div style="display:flex; align-items:center;">
-            <i class="fa-solid fa-arrow-left" onclick="closeMediaViewer()" style="font-size: 20px; color:white; cursor:pointer;"></i>
-            <div style="margin-left:15px; color:white;">
-                <h4 id="mvSender"></h4>
-                <p id="mvTime" style="font-size:10px;"></p>
+            <i class="fa-solid fa-arrow-left" onclick="closeMediaViewer()" style="font-size: 20px; cursor:pointer;"></i>
+            <div class="mv-info">
+                <h4 id="mvSender">Sender Name</h4>
+                <p id="mvTime">Day at Time</p>
             </div>
         </div>
+        <i class="fa-solid fa-ellipsis-vertical" onclick="showMediaOptions()" style="font-size: 20px; cursor:pointer; padding: 10px;"></i>
     </div>
     <div id="mediaViewerContent"></div>
 </div>
@@ -243,16 +312,42 @@
 
     let userData = JSON.parse(localStorage.getItem('farel_user'));
     let selectedReply = null;
-    let currentFile = null;
     let longPressTimer;
     
     if (!userData) window.location.href = "index.html";
 
-    // --- UTILS ---
-    function escapeHTML(str) { return str ? str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) : ""; }
-    const formatTime = (ts) => ts ? new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "";
+    // --- UTILS: PARSER & TIME ---
+    function escapeHTML(str) {
+        if (!str) return "";
+        return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
 
-    // --- STATUS & TYPING ---
+    const formatTime = (ts) => {
+        if(!ts) return "";
+        const d = new Date(ts);
+        return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    };
+
+    const formatDate = (ts) => {
+        if(!ts) return "";
+        const d = new Date(ts);
+        const now = new Date();
+        const yesterday = new Date(now); yesterday.setDate(now.getDate() - 1);
+        
+        if(d.toDateString() === now.toDateString()) return "Today";
+        if(d.toDateString() === yesterday.toDateString()) return "Yesterday";
+        
+        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long' });
+    };
+
+    const getFullDateString = (ts) => {
+        if(!ts) return "";
+        const d = new Date(ts);
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        return `${days[d.getDay()]}, ${d.getDate()} ${d.toLocaleDateString('id-ID', {month:'long'})}`;
+    };
+
+    // --- STATUS ---
     const myStatusRef = ref(db, 'online_users/' + userData.id);
     const typingRef = ref(db, 'typing/' + userData.id);
     set(myStatusRef, { username: userData.username, online: true });
@@ -264,69 +359,74 @@
         document.getElementById('userOnline').innerText = count;
     });
 
+    // --- TYPING & MENTION ---
+    async function loadUsersForMention(filter = "") {
+        try {
+            const res = await fetch(`https://raw.githubusercontent.com/aetherstarts/database/main/auth.json?t=${Date.now()}`);
+            const users = await res.json();
+            const dropdown = document.getElementById('mentionDropdown');
+            dropdown.innerHTML = '';
+            users.forEach(u => {
+                if(u.username.toLowerCase().includes(filter.toLowerCase())) {
+                    const item = document.createElement('div');
+                    item.className = 'mention-item';
+                    item.innerText = `@${u.username}`;
+                    item.onclick = () => {
+                        const input = document.getElementById('globalMessageInput');
+                        input.value = input.value.replace(/@\w*$/, `@${u.username} `);
+                        dropdown.style.display = 'none';
+                        input.focus();
+                    };
+                    dropdown.appendChild(item);
+                }
+            });
+            dropdown.style.display = dropdown.innerHTML ? 'block' : 'none';
+        } catch(e) {}
+    }
+
     const inputEl = document.getElementById('globalMessageInput');
     inputEl.addEventListener('input', (e) => {
-        if (e.target.value.length > 0) set(typingRef, { username: userData.username, status: 'typing...' });
+        const val = e.target.value;
+        const mentionMatch = val.match(/@(\w*)$/);
+        if (mentionMatch) loadUsersForMention(mentionMatch[1]);
+        else document.getElementById('mentionDropdown').style.display = 'none';
+
+        if (val.length > 0) set(typingRef, { username: userData.username, status: 'sedang mengetik...' });
         else remove(typingRef);
     });
 
     onValue(ref(db, 'typing'), (snap) => {
         const indicator = document.getElementById('typingIndicator');
         let typers = [];
-        snap.forEach(c => { if(c.val().username !== userData.username) typers.push(c.val().username); });
-        indicator.innerText = typers.length ? typers.join(', ') + ' sedang mengetik...' : '';
+        snap.forEach(child => {
+            const d = child.val();
+            if (d.username !== userData.username) typers.push(`${escapeHTML(d.username)} ${escapeHTML(d.status)}`);
+        });
+        indicator.innerText = typers.join(', ');
     });
 
-    // --- MEDIA HANDLING ---
-    window.handleFileSelect = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        currentFile = file;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const panel = document.getElementById('mediaPreviewPanel');
-            const img = document.getElementById('previewImage');
-            const vid = document.getElementById('previewVideo');
-            panel.style.display = 'flex';
-            if (file.type.startsWith('image/')) {
-                img.src = event.target.result; img.style.display = 'block'; vid.style.display = 'none';
-            } else {
-                vid.src = event.target.result; vid.style.display = 'block'; img.style.display = 'none';
-            }
-        };
-        reader.readAsDataURL(file);
-    };
-
-    window.closePreview = () => {
-        document.getElementById('mediaPreviewPanel').style.display = 'none';
-        document.getElementById('mediaUpload').value = '';
-        currentFile = null;
-    };
-
-    window.confirmSendMedia = async () => {
-        const caption = document.getElementById('captionInput').value;
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            await push(ref(db, 'roam_messages'), {
-                userId: userData.id, username: userData.username, text: caption,
-                media: e.target.result, mediaType: currentFile.type, replyTo: selectedReply, timestamp: serverTimestamp()
-            });
-            document.getElementById('captionInput').value = '';
-            closePreview();
-            cancelReply();
-        };
-        reader.readAsDataURL(currentFile);
-    };
-
-    // --- CHAT LOGIC ---
+    // --- SEND LOGIC ---
     window.sendGlobalMessage = async () => {
-        const text = inputEl.value.trim();
-        if (!text) return;
-        await push(ref(db, 'roam_messages'), {
-            userId: userData.id, username: userData.username, text: text,
-            replyTo: selectedReply, timestamp: serverTimestamp()
-        });
-        inputEl.value = ''; remove(typingRef); cancelReply();
+        const input = document.getElementById('globalMessageInput');
+        const fileInput = document.getElementById('mediaUpload');
+        const text = input.value.trim();
+        const file = fileInput.files[0];
+        if (!text && !file) return;
+
+        let mediaData = null, mType = null;
+        if (file) {
+            const reader = new FileReader();
+            mediaData = await new Promise(r => { reader.onload=()=>r(reader.result); reader.readAsDataURL(file); });
+            mType = file.type;
+        }
+
+        try {
+            await push(ref(db, 'roam_messages'), {
+                userId: userData.id, username: userData.username, text: text,
+                media: mediaData, mediaType: mType, replyTo: selectedReply, timestamp: serverTimestamp()
+            });
+            input.value = ''; fileInput.value = ''; cancelReply(); remove(typingRef);
+        } catch (e) { alert("Error!"); }
     };
 
     window.cancelReply = () => {
@@ -334,86 +434,176 @@
         document.getElementById('replyPreviewContainer').style.display = 'none';
     };
 
-    window.setReply = (username, text) => {
-        selectedReply = { username, text: text.substring(0, 50) };
-        document.getElementById('replyPreviewContainer').style.display = 'flex';
-        document.getElementById('replyText').innerText = `Replying to ${username}`;
-        inputEl.focus();
+    window.initSwipe = (el, username, text) => {
+        let touchStartX = 0;
+        el.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, {passive: true});
+        el.addEventListener('touchend', (e) => {
+            if (e.changedTouches[0].clientX - touchStartX > 60) {
+                setReply(username, text);
+            }
+        });
     };
 
-    // --- RENDER & INTERACTION ---
+    function setReply(username, text) {
+        selectedReply = { username, text: text.substring(0, 50) };
+        document.getElementById('replyPreviewContainer').style.display = 'flex';
+        document.getElementById('replyText').innerText = `Replying to ${username}...`;
+        document.getElementById('globalMessageInput').focus();
+    }
+
+    // --- CONTEXT MENU (REACTIONS) ---
+    function showContextMenu(e, key, data) {
+        e.preventDefault();
+        const menu = document.getElementById('contextMenu');
+        const isMe = data.userId === userData.id;
+        const touch = e.touches ? e.touches[0] : e;
+
+        let menuHtml = `
+            <div class="context-item" onclick="handleContext('reply', '${key}')"><i class="fa-solid fa-reply"></i> Reply</div>
+            <div class="context-item" onclick="handleContext('copy', '${key}')"><i class="fa-solid fa-copy"></i> Copy</div>
+        `;
+
+        if(isMe) {
+            menuHtml += `
+                <div class="context-item" onclick="handleContext('edit', '${key}')"><i class="fa-solid fa-pen"></i> Edit</div>
+                <div class="context-item" onclick="handleContext('delete', '${key}')"><i class="fa-solid fa-trash"></i> Delete</div>
+            `;
+        }
+
+        menu.innerHTML = menuHtml;
+        menu.style.display = 'block';
+        
+        // Positioning
+        let x = touch.clientX;
+        let y = touch.clientY;
+        if (x + 180 > window.innerWidth) x -= 180;
+        if (y + 200 > window.innerHeight) y -= 200;
+        
+        menu.style.left = x + 'px';
+        menu.style.top = y + 'px';
+
+        // Save data for handler
+        window.currentActiveMsg = { key, data };
+
+        document.addEventListener('click', () => menu.style.display = 'none', {once: true});
+    }
+
+    window.handleContext = (type, key) => {
+        const { data } = window.currentActiveMsg;
+        if(type === 'reply') setReply(data.username, data.text || "[Media]");
+        if(type === 'copy') navigator.clipboard.writeText(data.text || "");
+        if(type === 'delete') { if(confirm("Delete message?")) remove(ref(db, 'roam_messages/' + key)); }
+        if(type === 'edit') {
+            const newText = prompt("Edit your message:", data.text);
+            if(newText) update(ref(db, 'roam_messages/' + key), { text: newText });
+        }
+        document.getElementById('contextMenu').style.display = 'none';
+    };
+
+    // --- MEDIA VIEWER LOGIC ---
+    window.openMediaViewer = (data) => {
+        const mv = document.getElementById('mediaViewer');
+        const content = document.getElementById('mediaViewerContent');
+        document.getElementById('mvSender').innerText = data.username;
+        document.getElementById('mvTime').innerText = `${getFullDateString(data.timestamp)} at ${formatTime(data.timestamp)}`;
+        
+        if (data.mediaType.startsWith('image/')) {
+            content.innerHTML = `<img src="${data.media}" id="mvTarget">`;
+        } else {
+            content.innerHTML = `<video src="${data.media}" controls autoplay id="mvTarget"></video>`;
+        }
+        
+        mv.style.display = 'flex';
+        window.activeMedia = data;
+    };
+
+    window.closeMediaViewer = () => {
+        document.getElementById('mediaViewer').style.display = 'none';
+        document.getElementById('mediaViewerContent').innerHTML = '';
+    };
+
+    window.showMediaOptions = () => {
+        const data = window.activeMedia;
+        const opt = prompt("1. Save to Gallery\n2. Share\n3. Reply\n4. Show All Media\n\nChoose number:");
+        if(opt === '1') {
+            const link = document.createElement('a');
+            link.href = data.media;
+            link.download = `FAREL_VIP_${Date.now()}`;
+            link.click();
+        } else if(opt === '2') {
+            if(navigator.share) navigator.share({title: 'Share Media', url: data.media});
+        } else if(opt === '3') {
+            closeMediaViewer();
+            setReply(data.username, "[Media]");
+        } else if(opt === '4') {
+            alert("Feature coming soon!");
+        }
+    };
+
+    // --- RENDER ---
     const chatContainer = document.getElementById('globalChatContainer');
+    
     onValue(query(ref(db, 'roam_messages'), limitToLast(50)), (snap) => {
+        const isAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop <= chatContainer.clientHeight + 150;
         chatContainer.innerHTML = '';
+        let lastDateStr = "";
+        
         snap.forEach((child) => {
             const data = child.val();
             const key = child.key;
             const isMe = data.userId === userData.id;
+            
+            // Date Separator
+            const currentDateStr = formatDate(data.timestamp);
+            if(currentDateStr !== lastDateStr) {
+                const sep = document.createElement('div');
+                sep.className = 'date-separator';
+                sep.innerText = currentDateStr;
+                chatContainer.appendChild(sep);
+                lastDateStr = currentDateStr;
+            }
+
             const div = document.createElement('div');
             div.className = `message-wrapper ${isMe ? 'msg-me' : 'msg-other'}`;
             
-            // Long Press & Swipe
-            div.oncontextmenu = (e) => { e.preventDefault(); showContextMenu(e, key, data); };
-            div.ontouchstart = (e) => { longPressTimer = setTimeout(() => showContextMenu(e, key, data), 600); };
+            // Interaction
+            div.oncontextmenu = (e) => showContextMenu(e, key, data);
+            div.ontouchstart = (e) => { longPressTimer = setTimeout(() => showContextMenu(e, key, data), 700); };
             div.ontouchend = () => clearTimeout(longPressTimer);
 
-            let html = `<span class="sender-name">${escapeHTML(data.username)}</span>`;
-            if (data.replyTo) html += `<div class="reply-box"><b>@${data.replyTo.username}</b>: ${escapeHTML(data.replyTo.text)}</div>`;
+            let safeUser = escapeHTML(data.username);
+            let safeText = escapeHTML(data.text);
+            
+            let htmlContent = `<span class="sender-name">${safeUser}</span>`;
+            if (data.replyTo) htmlContent += `<div class="reply-box"><b>@${escapeHTML(data.replyTo.username)}</b>: ${escapeHTML(data.replyTo.text)}</div>`;
+            
+            if (safeText) {
+                const formatted = safeText.replace(/@(\w+)/g, '<span class="tag-highlight">@$1</span>');
+                htmlContent += `<div>${formatted}</div>`;
+            }
             
             if (data.media) {
-                html += `<div class="media-container" onclick='viewMedia(${JSON.stringify(data)})'>
-                            <div class="media-loading">LOADING...</div>`;
-                if (data.mediaType.startsWith('image/')) {
-                    html += `<img src="${data.media}" class="media-content" onload="this.style.display='block'; this.previousElementSibling.style.display='none'">`;
-                } else {
-                    html += `<video src="${data.media}" class="media-content" onloadedmetadata="this.style.display='block'; this.previousElementSibling.style.display='none'"></video><i class="fa-solid fa-play" style="position:absolute; color:white; font-size:20px;"></i>`;
+                htmlContent += `<div class="media-container" onclick='openMediaViewer(${JSON.stringify(data)})'>
+                    <div class="media-loading">PREPARING MEDIA...</div>`;
+                if (data.mediaType?.startsWith('image/')) {
+                    htmlContent += `<img src="${data.media}" class="media-content" onload="this.style.display='block'; this.previousElementSibling.style.display='none';">`;
+                } else if (data.mediaType?.startsWith('video/')) {
+                    htmlContent += `<video src="${data.media}" class="media-content" onloadedmetadata="this.style.display='block'; this.previousElementSibling.style.display='none';"></video><i class="fa-solid fa-play" style="position:absolute; color:white; font-size:25px; opacity:0.8;"></i>`;
                 }
-                html += `</div>`;
+                htmlContent += `</div>`;
             }
-            if (data.text) html += `<div>${escapeHTML(data.text).replace(/@(\w+)/g, '<span class="tag-highlight">@$1</span>')}</div>`;
-            html += `<span class="msg-time">${formatTime(data.timestamp)}</span>`;
             
-            div.innerHTML = html;
+            htmlContent += `<span class="msg-time">${formatTime(data.timestamp)}</span>`;
+            div.innerHTML = htmlContent;
             chatContainer.appendChild(div);
-
-            // Swipe to reply logic
-            let touchStartX = 0;
-            div.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, {passive: true});
-            div.addEventListener('touchend', (e) => {
-                if (e.changedTouches[0].clientX - touchStartX > 60) window.setReply(data.username, data.text || "[Media]");
-            });
+            window.initSwipe(div, safeUser, safeText || "[Media]");
         });
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        if (isAtBottom) chatContainer.scrollTop = chatContainer.scrollHeight;
     });
 
-    // --- CONTEXT MENU ---
-    function showContextMenu(e, key, data) {
-        const menu = document.getElementById('contextMenu');
-        const touch = e.touches ? e.touches[0] : e;
-        let html = `<div class="context-item" onclick="window.setReply('${data.username}', '${data.text||"[Media]"}')"><i class="fa-solid fa-reply"></i> Reply</div>`;
-        if (data.userId === userData.id) {
-            html += `<div class="context-item" onclick="deleteMsg('${key}')"><i class="fa-solid fa-trash"></i> Delete</div>`;
-        }
-        menu.innerHTML = html;
-        menu.style.display = 'block';
-        menu.style.left = Math.min(touch.clientX, window.innerWidth - 180) + 'px';
-        menu.style.top = Math.min(touch.clientY, window.innerHeight - 100) + 'px';
-        document.addEventListener('click', () => menu.style.display = 'none', {once: true});
-    }
-
-    window.deleteMsg = (key) => { if(confirm("Hapus pesan ini?")) remove(ref(db, 'roam_messages/' + key)); };
-
-    window.viewMedia = (data) => {
-        const mv = document.getElementById('mediaViewer');
-        document.getElementById('mvSender').innerText = data.username;
-        document.getElementById('mvTime').innerText = formatTime(data.timestamp);
-        document.getElementById('mediaViewerContent').innerHTML = data.mediaType.startsWith('image/') ? 
-            `<img src="${data.media}">` : `<video src="${data.media}" controls autoplay></video>`;
-        mv.style.display = 'flex';
-    };
-    window.closeMediaViewer = () => document.getElementById('mediaViewer').style.display = 'none';
-
-    inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter') window.sendGlobalMessage(); });
+    document.getElementById('sendBtn').addEventListener('click', window.sendGlobalMessage);
+    document.getElementById('globalMessageInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') window.sendGlobalMessage(); });
 </script>
 </body>
 </html>
